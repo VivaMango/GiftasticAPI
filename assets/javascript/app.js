@@ -22,12 +22,12 @@ $("#giphySubmit").on("click", function() {
         console.log(response); //WORKING
         console.log(response.data , "response.data test") //WORKING
         console.log(response.data[0] , "response.data0 test") //WORKING
-        console.log(response.data[0].embed_url , "embed_url test") //WORKING
-        var embed_urltest = response.data[1].embed_url //saving access to JSON as variable
+        var embed_urltest = response.data[1].images.original.url //saving access to JSON as variable WORKING!!!
         var newGIF = $("<img>") //Making a new HTML image container for our GIF
         newGIF.attr("src" , embed_urltest) //adding the SRC attribute link to our GIF
+        newGIF.addClass("responseGIF") //addClass for styling
         console.log(response.data[1] , "responsedata1") //WORKING
-        $("#giphyDisplay").append(newGIF) //***********CROSS-ORIGIN READ BLOCKING ERROR HAPPENS HERE*************
+        $("#giphyDisplay").append(newGIF) 
     });
 });
 
