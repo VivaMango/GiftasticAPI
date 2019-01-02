@@ -36,20 +36,23 @@ $(".gifFetchButton").on("click", function () {
         url: queryURL, //using queryURL structured variable
         method: "GET" //GET method for getting GIFs back as response JSON
     }).then(function(response) {  //function utilizing the JSON response object from GIPHY
-        console.log(response); //WORKING
-        console.log(response.data , "response.data test") //WORKING
-        console.log(response.data[0] , "response.data0 test") //WORKING
-        var embed_urltest = response.data[1].images.original.url //saving access to JSON as variable WORKING!!!
-        var newGIF = $("<img>") //Making a new HTML image container for our GIF
-        newGIF.attr("src" , embed_urltest) //adding the SRC attribute link to our GIF
-        newGIF.addClass("responseGIF") //addClass for styling
-        console.log(response.data[1] , "responsedata1") //WORKING
-        $("#giphyDisplay").append(newGIF) 
+        // for loop generating 10 gifs from the response JSON
+        for (i = 0; i < 10; i++) {
+            var animatedURL = response.data[i].images.original.url
+            var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
+            var newGIF = $("<img>") //Making a new HTML image container for our GIF
+            newGIF.attr("src" , animatedURL) //adding the SRC attribute link to our GIF
+            // newGIF.attr("animated-link" , animatedURL) //adding our animated-link attribute to call with onclick to animate the gif
+            newGIF.addClass("gif") //addClass for styling
+            // console.log(response.data[i] , "responsedata[i]") //WORKING
+            $("#giphyDisplay").append(newGIF) 
+        }        
     });
 })
 
-
-
+$(".gif").on("click" , function () {
+    console.log("onclick GIF working")
+})
 
 // Getting the input value from our giphyInput and preventing default action of giphySubmit button
 $("#giphySubmit").on("click", function() {
@@ -66,7 +69,7 @@ $("#giphySubmit").on("click", function() {
         console.log(response); //WORKING
         console.log(response.data , "response.data test") //WORKING
         console.log(response.data[0] , "response.data0 test") //WORKING
-        var embed_urltest = response.data[1].images.original.url //saving access to JSON as variable WORKING!!!
+        var embed_urltest = response.data[1].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
         var newGIF = $("<img>") //Making a new HTML image container for our GIF
         newGIF.attr("src" , embed_urltest) //adding the SRC attribute link to our GIF
         newGIF.addClass("responseGIF") //addClass for styling
