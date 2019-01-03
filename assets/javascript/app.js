@@ -6,8 +6,10 @@ var topics = ["apple" , "banana" , "orange" , "mango" , "pineapple" , "coconut" 
 var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym" //VivaMango's GIPHY API Key
 var searchTerm //defining to use later in AJAX on-click
 var queryURL //defining to use later in response
-
-
+var response
+var newGIF = $("<img>")
+var stillURL
+var animatedURL
 
 // Working with our array of topics to create buttons forEach topics when the page is loaded
 
@@ -27,44 +29,69 @@ buttonGenerator();
 
 
 // CLICK LISTENER FOR GIFFETCHBUTTON 
-$(".gifFetchButton").on("click", function () {
+$(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED EVENTLISTENER
     console.log(this) //WORKING
-    var searchTerm = $(this).data("buttontext")
-    console.log(searchTerm , "buttonclick searchTerm test")
+    var searchTerm = $(this).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
+    console.log(searchTerm , "buttonclick searchTerm test") //WORKING
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
-    $.ajax({
+    $.ajax({ //OPENING ASYNCHRONOUS JSON AND XML CALL
         url: queryURL, //using queryURL structured variable
         method: "GET" //GET method for getting GIFs back as response JSON
     }).then(function(response) {  //function utilizing the JSON response object from GIPHY
+        
         // for loop generating 10 gifs from the response JSON
-        for (i = 0; i < 10; i++) {
-            var animatedURL = response.data[i].images.original.url
-            var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
-            var newGIF = $("<img>") //Making a new HTML image container for our GIF
-            newGIF.attr("src" , stillURL) //adding stillURL as the img src to load still gif first
-            newGIF.attr("animated-link" , animatedURL) //adding animatedURL as an attribute to call later
-            newGIF.attr("still-link" , stillURL) //adding stillURL as an attribute to call later
-            newGIF.attr("link-state" , "still") //adding a link-state attribute to hold status of gif still/animated
-            newGIF.addClass("gif") //addClass for styling
-            // console.log(response.data[i] , "responsedata[i]") //WORKING
-            $("#giphyDisplay").append(newGIF) //appending our new GIFs to the HTML container #giphyDisplay
-            $(".gif").on("click" , function () { //onClick for our dynamically added gifs
-                console.log("onclick GIF working") //WORKING BUT BUGGED - CONSOLE LOGS [i] times
-                var linkState = $(this).attr("link-state")
-                if (linkState === "still") {
-                    console.log("image was still")
-                    $(this).attr("src" , $(this).attr("animated-link"))
-                    $(this).attr("link-state" , "animated")
-                } else {
-                    console.log("image was animated")
-                    $(this).attr("src" , $(this).attr("still-link"))
-                    $(this).attr("link-state" , "still")
-                }
-            }) 
+        for (i = 0; i < 10; i++) { //FOR LOOP GENERATING GIFS FROM RESPONSE JSON
+            animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
+            stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
+            console.log(i , "itest")
+            console.log(animatedURL , "animatedURL outside gifCreator")
+            gifCreator()
+        // var newGIF = $("<img>") //Making a new HTML image container for our GIF
+            // var animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
+            // var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
+            // var newGIF = $("<img>") //Making a new HTML image container for our GIF
+            // newGIF.attr("src" , stillURL) //adding stillURL as the img src to load still gif first
+            // newGIF.attr("animated-link" , animatedURL) //adding animatedURL as an attribute to call later
+            // newGIF.attr("still-link" , stillURL) //adding stillURL as an attribute to call later
+            // newGIF.attr("link-state" , "still") //adding a link-state attribute to hold status of gif still/animated
+            // newGIF.addClass("gif") //addClass for styling
+            // // console.log(response.data[i] , "responsedata[i]") //WORKING
+            // $("#giphyDisplay").append(newGIF) //appending our new GIFs to the HTML container #giphyDisplay
+            // $(".gif").on("click" , function () { //onClick for our dynamically added gifs
+            //     console.log("onclick GIF working") //WORKING BUT BUGGED - CONSOLE LOGS [i] times
+            //     console.log(this , "this click test") //WORKING
+            //     var linkState = $(this).attr("link-state") //saving access to link-state data attribute as variable
+            //     if (linkState === "still") { //IF LINK STATE IS STILL (DEFAULT)
+            //         console.log("image was still") //WORKING
+            //         $(this).attr("src" , $(this).attr("animated-link")) //SWAPPING IMAGE LINK TO ANIMATED LINK
+            //         $(this).attr("link-state" , "animated") //UPDATING link-state DATA ATTRIBUTE TO ANIMATED
+            //     } else { //IF LINK STATE IS NOT STILL (ANIMATED)
+            //         console.log("image was animated") //WORKING
+            //         $(this).attr("src" , $(this).attr("still-link")) //SWAPPING IMAGE LINK TO STILL LINK 
+            //         $(this).attr("link-state" , "still") // UPDATING link-state DATA ATTRIBUTE TO STILL
+            //     }
+            // })
         }        
     });
 })
 
+
+// DECLARING OUR gifCreator function: ACCESSES JSON RESPONSE AND DYNAMICALLY ADDS TO #giphyDisplay on index.html
+function gifCreator () {
+    // var animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
+    // var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
+    // var newGIF = $("<img>") //Making a new HTML image container for our GIF
+    newGIF.attr("src" , stillURL) //adding stillURL as the img src to load still gif first
+    newGIF.attr("animated-link" , animatedURL) //adding animatedURL as an attribute to call later
+    newGIF.attr("still-link" , stillURL) //adding stillURL as an attribute to call later
+    newGIF.attr("link-state" , "still") //adding a link-state attribute to hold status of gif still/animated
+    newGIF.addClass("gif") //addClass for styling
+    console.log("how many times am I running")
+    console.log(animatedURL , "animatedURL inside gifCreator")
+     // console.log(response.data[i] , "responsedata[i]") //WORKING
+    $("#giphyDisplay").append(newGIF) //appending our new GIFs to the HTML container #giphyDisplay
+    console.log(animatedURL , "animatedURL inside AFTER APPEND")
+}
 
 
 // Getting the input value from our giphyInput and preventing default action of giphySubmit button
