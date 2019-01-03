@@ -41,18 +41,31 @@ $(".gifFetchButton").on("click", function () {
             var animatedURL = response.data[i].images.original.url
             var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
             var newGIF = $("<img>") //Making a new HTML image container for our GIF
-            newGIF.attr("src" , animatedURL) //adding the SRC attribute link to our GIF
-            // newGIF.attr("animated-link" , animatedURL) //adding our animated-link attribute to call with onclick to animate the gif
+            newGIF.attr("src" , stillURL) //adding stillURL as the img src to load still gif first
+            newGIF.attr("animated-link" , animatedURL) //adding animatedURL as an attribute to call later
+            newGIF.attr("still-link" , stillURL) //adding stillURL as an attribute to call later
+            newGIF.attr("link-state" , "still") //adding a link-state attribute to hold status of gif still/animated
             newGIF.addClass("gif") //addClass for styling
             // console.log(response.data[i] , "responsedata[i]") //WORKING
-            $("#giphyDisplay").append(newGIF) 
+            $("#giphyDisplay").append(newGIF) //appending our new GIFs to the HTML container #giphyDisplay
+            $(".gif").on("click" , function () { //onClick for our dynamically added gifs
+                console.log("onclick GIF working") //WORKING BUT BUGGED - CONSOLE LOGS [i] times
+                var linkState = $(this).attr("link-state")
+                if (linkState === "still") {
+                    console.log("image was still")
+                    $(this).attr("src" , $(this).attr("animated-link"))
+                    $(this).attr("link-state" , "animated")
+                } else {
+                    console.log("image was animated")
+                    $(this).attr("src" , $(this).attr("still-link"))
+                    $(this).attr("link-state" , "still")
+                }
+            }) 
         }        
     });
 })
 
-$(".gif").on("click" , function () {
-    console.log("onclick GIF working")
-})
+
 
 // Getting the input value from our giphyInput and preventing default action of giphySubmit button
 $("#giphySubmit").on("click", function() {
