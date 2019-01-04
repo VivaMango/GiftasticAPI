@@ -27,10 +27,15 @@ function buttonGenerator() {
 buttonGenerator();
 
 
-
 // CLICK LISTENER FOR GIFFETCHBUTTON 
 $(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED EVENTLISTENER
-    var searchTerm = $(evt.target).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
+    console.log(event.target , "event.target gifFetchButton")
+    console.log(event.currentTarget , "event.currentTarget gifFetchButton")
+    var eventTarget = event.currentTarget //WORKING - DOES NOT WORK WITH $()!!!
+    console.log(eventTarget , "eventTarget var")
+    var targetClass = $(event.currentTarget).attr("class") //WORKING - NEEDS $() TO WORK!!!
+    console.log(targetClass , "targetClass var")
+    var searchTerm = $(this).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
     console.log(searchTerm , "buttonclick searchTerm test") //WORKING
     var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym"
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
@@ -38,24 +43,20 @@ $(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED
         url: queryURL, //using queryURL structured variable
         method: "GET" //GET method for getting GIFs back as response JSON
     }).then(function(response) {  //function utilizing the JSON response object from GIPHY
-        var topics = ["apple" , "banana" , "orange" , "mango" , "pineapple" , "coconut" , "pear"]
-//FOR AJAX
-var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym" //VivaMango's GIPHY API Key
-var searchTerm //defining to use later in AJAX on-click
-var queryURL //defining to use later in response
-var response
-// var newGIF = $("<img>")
-var stillURL
-var animatedURL
         // for loop generating 10 gifs from the response JSON
         for (i = 0; i < 10; i++) { //FOR LOOP GENERATING GIFS FROM RESPONSE JSON
             animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
             stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
             console.log(i , "itest")
             console.log(animatedURL , "animatedURL outside gifCreator")
-            gifCreator()
-            stateSwapper() //MOVE OUT OF FOR LOOP BECAUSE CLICK EVENT
-        // var newGIF = $("<img>") //Making a new HTML image container for our GIF
+            gifCreator() //RUNS gifCreator function (DEF Ln108) - Dynamically creates <img> tag with attr's and appends to #giphyDisplay
+            gifSwapper() //testing gifSwapper Event.target
+
+             //STATESWAPPER () was here -MOVE OUT OF FOR LOOP BECAUSE CLICK EVENT
+            
+            
+            // MARKED FOR DELETION, REFACTORED
+             // var newGIF = $("<img>") //Making a new HTML image container for our GIF
             // var animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
             // var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
             // var newGIF = $("<img>") //Making a new HTML image container for our GIF
@@ -80,12 +81,38 @@ var animatedURL
             //         $(this).attr("link-state" , "still") // UPDATING link-state DATA ATTRIBUTE TO STILL
             //     }
             // })
+            //MARKED FOR DELETION, REFACTORED
+
+
+
+
+
+
         }        
     });
 })
 
 
-// DECLARING OUR gifCreator function: ACCESSES JSON RESPONSE AND DYNAMICALLY ADDS TO #giphyDisplay on index.html
+
+//RUN THIS .on("click") using event.target attrs as params
+function gifSwapper() { //function to swap between animated and still URLs. Takes three arguments, still-link attr and animated-link attr and link-state attr
+    console.log((Event.currentTarget) , "gifSwapper event.target")
+    
+    // if (state = "still") {
+    //     console.log("img was still")
+    //     // $(this).attr("src" , $(this).attr("animated-link")) //SWAPPING IMAGE LINK TO ANIMATED LINK
+    //     // $(this).attr("link-state" , "animated") //UPDATING link-state DATA ATTRIBUTE TO ANIMATED
+    // } else {
+    //     console.log("img was animated")
+    //     // $(Event.target).attr("src" , $(this).attr("still-link")) //SWAPPING IMAGE LINK TO STILL LINK 
+    //     // $(this).attr("link-state" , "still") // UPDATING link-state DATA ATTRIBUTE TO STILL
+    // }
+} 
+
+
+
+
+// DECLARING OUR gifCreator function: ACCESSES JSON RESPONSE AND DYNAMICALLY ADDS <img> with attr's TO #giphyDisplay on index.html
 function gifCreator () {
     // var animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
     // var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
