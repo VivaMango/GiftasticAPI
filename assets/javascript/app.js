@@ -7,7 +7,7 @@ var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym" //VivaMango's GIPHY API Key
 var searchTerm //defining to use later in AJAX on-click
 var queryURL //defining to use later in response
 var response
-var newGIF = $("<img>")
+// var newGIF = $("<img>")
 var stillURL
 var animatedURL
 
@@ -30,15 +30,23 @@ buttonGenerator();
 
 // CLICK LISTENER FOR GIFFETCHBUTTON 
 $(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED EVENTLISTENER
-    console.log(this) //WORKING
-    var searchTerm = $(this).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
+    var searchTerm = $(evt.target).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
     console.log(searchTerm , "buttonclick searchTerm test") //WORKING
+    var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym"
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
     $.ajax({ //OPENING ASYNCHRONOUS JSON AND XML CALL
         url: queryURL, //using queryURL structured variable
         method: "GET" //GET method for getting GIFs back as response JSON
     }).then(function(response) {  //function utilizing the JSON response object from GIPHY
-        
+        var topics = ["apple" , "banana" , "orange" , "mango" , "pineapple" , "coconut" , "pear"]
+//FOR AJAX
+var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym" //VivaMango's GIPHY API Key
+var searchTerm //defining to use later in AJAX on-click
+var queryURL //defining to use later in response
+var response
+// var newGIF = $("<img>")
+var stillURL
+var animatedURL
         // for loop generating 10 gifs from the response JSON
         for (i = 0; i < 10; i++) { //FOR LOOP GENERATING GIFS FROM RESPONSE JSON
             animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
@@ -46,6 +54,7 @@ $(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED
             console.log(i , "itest")
             console.log(animatedURL , "animatedURL outside gifCreator")
             gifCreator()
+            stateSwapper() //MOVE OUT OF FOR LOOP BECAUSE CLICK EVENT
         // var newGIF = $("<img>") //Making a new HTML image container for our GIF
             // var animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
             // var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
@@ -80,7 +89,7 @@ $(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED
 function gifCreator () {
     // var animatedURL = response.data[i].images.original.url //saving access to JSON as variable 
     // var stillURL = response.data[i].images.original_still.url //saving access to JSON as variable WORKING!!! SWAPPED TO STILL
-    // var newGIF = $("<img>") //Making a new HTML image container for our GIF
+    var newGIF = $("<img>") //Making a new HTML image container for our GIF
     newGIF.attr("src" , stillURL) //adding stillURL as the img src to load still gif first
     newGIF.attr("animated-link" , animatedURL) //adding animatedURL as an attribute to call later
     newGIF.attr("still-link" , stillURL) //adding stillURL as an attribute to call later
@@ -91,6 +100,20 @@ function gifCreator () {
      // console.log(response.data[i] , "responsedata[i]") //WORKING
     $("#giphyDisplay").append(newGIF) //appending our new GIFs to the HTML container #giphyDisplay
     console.log(animatedURL , "animatedURL inside AFTER APPEND")
+}
+
+function stateSwapper () {
+    $(".gif").on("click" , function () {
+        if (linkState === "still") { //IF LINK STATE IS STILL (DEFAULT)
+                    console.log("image was still") //WORKING
+                    $(this).attr("src" , $(this).attr("animated-link")) //SWAPPING IMAGE LINK TO ANIMATED LINK
+                    $(this).attr("link-state" , "animated") //UPDATING link-state DATA ATTRIBUTE TO ANIMATED
+                } else { //IF LINK STATE IS NOT STILL (ANIMATED)
+                    console.log("image was animated") //WORKING
+                    $(this).attr("src" , $(this).attr("still-link")) //SWAPPING IMAGE LINK TO STILL LINK 
+                    $(this).attr("link-state" , "still") // UPDATING link-state DATA ATTRIBUTE TO STILL
+                }
+    })
 }
 
 
