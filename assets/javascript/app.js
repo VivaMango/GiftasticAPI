@@ -37,7 +37,7 @@ $(".gifFetchButton").on("click", function () { //WHEN GIFFETCH BUTTON IS CLICKED
     var searchTerm = $(this).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
     console.log(searchTerm , "buttonclick searchTerm test") //WORKING
     var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym" //VivaMango Giphy API Key
-    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
     $.ajax({ //OPENING ASYNCHRONOUS JSON AND XML CALL
         url: queryURL, //using queryURL structured variable TODO: Add limit parameter to queryURL
         method: "GET" //GET method for getting GIFs back as response JSON
@@ -145,7 +145,7 @@ $("#giphySubmit").on("click", function() {
         var searchTerm = $(this).data("buttontext") //USING THE DATA ATTRIBUTE BUTTONTEXT TO DECLARE searchTerm
         console.log(searchTerm , "buttonclick searchTerm test") //WORKING
         var APIKey = "YcQglRE4TS4xD2BTKk106HhEgiRLbsym" //VivaMango Giphy API Key
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
         $.ajax({ //OPENING ASYNCHRONOUS JSON AND XML CALL
             url: queryURL, //using queryURL structured variable TODO: Add limit parameter to queryURL
             method: "GET" //GET method for getting GIFs back as response JSON
