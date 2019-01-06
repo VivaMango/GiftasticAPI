@@ -128,6 +128,10 @@ $("#giphySubmit").on("click", function() {
     var searchTerm = $("#giphyInput").val().trim() //saving input field value as a variable
     // var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + APIKey //structuring our queryURL based on GIPHY documentation
     console.log (searchTerm , "searchTerm .val test") //WORKING
+
+    if (topics.includes(searchTerm)) {
+    alert("Uh oh! Looks like that button already exists!")
+} else {
     topics.push(searchTerm) //adding the searchTerm to our array of topics
     console.log(topics , "topics after searchTerm push") //WORKING
     $("#buttonDisplay").empty() //emptying our button display to add a new button
@@ -177,6 +181,7 @@ $("#giphySubmit").on("click", function() {
             })        
         });
     })
+  } 
 });
 
 
